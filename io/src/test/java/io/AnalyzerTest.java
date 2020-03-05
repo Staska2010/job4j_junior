@@ -18,7 +18,7 @@ public class AnalyzerTest {
 
     @Test
     public void whenReadLogFromFileThenResultInTwoLines() {
-        String logFile = "./data/server.log";
+        String logFile = "./data/server.logi";
         String targetFile = "./data/target";
         Analyzer an = new Analyzer();
         an.unavailable(logFile,targetFile);
