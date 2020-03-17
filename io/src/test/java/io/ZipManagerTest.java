@@ -30,8 +30,8 @@ public class ZipManagerTest {
     public void createTempZip() throws IOException  {
         createTempFileTree();
         tempDir = System.getProperty("java.io.tmpdir");
-        String[] args = ("-d " + tempDir + "project " + "-e  *.log -o "
-                + tempDir + "project.zip").split("\\s+");
+        String[] args = ("-d " + tempDir + "/project " + "-e  *.txt -o "
+                + tempDir + "/project.zip").split("\\s+");
         zip = new ZipManager(args);
         zip.pack();
     }
@@ -49,7 +49,7 @@ public class ZipManagerTest {
 
     @Test
     public void whenUnzipZipFileItContainsTheSameDirectoryContent() {
-        File unpackLocation = new File(tempDir + "unpack");
+        File unpackLocation = new File(tempDir + "/unpack");
         unpackLocation.mkdir();
         zip.unPack(new File(tempDir + File.separator + zip.targetZipFile.getName()),
                unpackLocation);

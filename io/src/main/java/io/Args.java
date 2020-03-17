@@ -34,9 +34,9 @@ public class Args {
     public boolean validateCommandLine() {
         parse = String.join(" ", args);
         boolean result = false;
-        if (!chunkLine("(-d\\s+)([a-zA-Z.*:\\\\]+)\\s+" +
-                        "(-e\\s+)(\\*.\\w+\\b\\s+)*" +
-                        "(-o\\s+)([a-zA-Z.*:\\\\]+\\b)",
+        if (!chunkLine("(-d\\s+)([a-zA-Z.*:\\\\\\/]+)\\s+" +
+                        "(-e\\s+)(\\*\\.\\w+\\b\\s+)*" +
+                        "(-o\\s+)([a-zA-Z.*:\\\\\\/]+\\b)",
                 0).isEmpty()) {
             result = true;
         }
@@ -52,7 +52,7 @@ public class Args {
     }
 
     private void extractDirectory() {
-        directory = new File(chunkLine("(-d\\s+)([a-zA-Z.*:\\\\]+\\b)", 2));
+        directory = new File(chunkLine("(-d\\s+)([a-zA-Z.*:\\\\\\/]+\\b)", 2));
     }
 
     private void extractExcludeList() {
@@ -63,7 +63,7 @@ public class Args {
     }
 
     private void extractOutputZip() {
-        output = new File(chunkLine("(-o\\s+)([a-zA-Z.*:\\\\]+\\b)", 2));
+        output = new File(chunkLine("(-o\\s+)([a-zA-Z.*:\\\\\\/]+\\b)", 2));
         try {
             output.createNewFile();
         } catch (IOException e) {
