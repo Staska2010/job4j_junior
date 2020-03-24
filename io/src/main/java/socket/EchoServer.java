@@ -5,27 +5,39 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class EchoServer {
-    private static final String byeMsg = "/?msg=bye";
+    private static final String exitMsg = "exit";
+    boolean shutdown = false;
 
-    public static void main(String[] args) throws IOException {
-
-        try (ServerSocket server = new ServerSocket(9000)) {
-            while (true) {
-                Socket client = server.accept();
-                try (OutputStream out = client.getOutputStream();
-                     BufferedReader in = new BufferedReader(
-                             new InputStreamReader(client.getInputStream()))) {
-                    String str;
-                    while (!(str = in.readLine()).isEmpty()) {
-                        System.out.println(str);
-                        if (str.toLowerCase().contains(byeMsg)) {
-                            server.close();
-                        }
-                    }
-                    out.write("HTTP/1.1 200 OK\r\n\\".getBytes());
+    public void start() {
+        ServerSocket server = null;
+        try {
+            server = new ServerSocket(9000);
+        } catch (IOException exc) {
+            exc.printStackTrace();
+        }
+        while (!shutdown) {
+            Socket client;
+            if (server != null) {
+                try {
+                    client = server.accept();
+                    OutputStream out = client.getOutputStream();
+                    InputStream in = client.getInputStream();
+                    Request request = new Request(in);
+                    String reqMsg = request.parse();
+                    Response response = new Response(out);
+                    response.setRequestMessage(reqMsg);
+                    response.sendMessage();
+                    shutdown = request.getUri().equalsIgnoreCase(exitMsg);
+                } catch (IOException exc) {
+                    exc.printStackTrace();
                 }
             }
         }
+    }
+
+    public static void main(String[] args) throws IOException {
+        EchoServer server = new EchoServer();
+        server.start();
     }
 }
 
