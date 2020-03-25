@@ -9,15 +9,11 @@ public class EchoServer {
     boolean shutdown = false;
 
     public void start() {
-        ServerSocket server = null;
+        ServerSocket server;
         try {
             server = new ServerSocket(9000);
-        } catch (IOException exc) {
-            exc.printStackTrace();
-        }
-        while (!shutdown) {
-            Socket client;
-            if (server != null) {
+            while (!shutdown) {
+                Socket client;
                 try {
                     client = server.accept();
                     OutputStream out = client.getOutputStream();
@@ -25,6 +21,7 @@ public class EchoServer {
                     Request request = new Request(in);
                     String reqMsg = request.parse();
                     Response response = new Response(out);
+                    response.init();
                     response.setRequestMessage(reqMsg);
                     response.sendMessage();
                     shutdown = request.getUri().equalsIgnoreCase(exitMsg);
@@ -32,6 +29,8 @@ public class EchoServer {
                     exc.printStackTrace();
                 }
             }
+        } catch (IOException exc) {
+            exc.printStackTrace();
         }
     }
 
