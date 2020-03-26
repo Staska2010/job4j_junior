@@ -27,4 +27,5 @@ target
 .idea/
 *.iml
 log.txt
-.gitignore
+*.gitignore
+checkstyle.xml
