@@ -3,7 +3,7 @@ package socket;
 import java.io.*;
 
 public class Request {
-    private String URI;
+    private String uri;
     private InputStream input;
 
     Request(InputStream input) {
@@ -15,8 +15,10 @@ public class Request {
         String buffer;
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         try {
-            while (!(buffer = reader.readLine()).isEmpty()) {
+            buffer = reader.readLine();
+            while (!buffer.isEmpty()) {
                 request.append(buffer);
+                buffer = reader.readLine();
             }
         } catch (IOException exc) {
             exc.printStackTrace();
@@ -25,21 +27,21 @@ public class Request {
     }
 
     private String parseURI(String request) {
-        URI = "";
+        uri = "";
         if (request.startsWith("GET")) {
             int position1 = request.indexOf(" ");
             int position2 = request.indexOf(" ", position1 + 1);
-            URI = request.substring(position1, position2);
+            uri = request.substring(position1, position2);
         }
         String prefix = "/?msg";
-        if (URI.contains(prefix)) {
-            URI = URI.substring(7);
+        if (uri.contains(prefix)) {
+            uri = uri.substring(7);
         }
-        return URI;
+        return uri;
     }
 
     public String getUri() {
-        return URI;
+        return uri;
     }
 
 }

@@ -5,26 +5,22 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class EchoServer {
-    private static final String exitMsg = "exit";
+    private static final String EXIT_MSG = "exit";
     boolean shutdown = false;
 
     public void start() {
-        ServerSocket server;
-        try {
-            server = new ServerSocket(9000);
+        try (ServerSocket server = new ServerSocket(9000)) {
             while (!shutdown) {
-                Socket client;
-                try {
-                    client = server.accept();
-                    OutputStream out = client.getOutputStream();
-                    InputStream in = client.getInputStream();
+                Socket client = server.accept();
+                try (OutputStream out = client.getOutputStream();
+                     InputStream in = client.getInputStream()) {
                     Request request = new Request(in);
                     String reqMsg = request.parse();
                     Response response = new Response(out);
                     response.init();
                     response.setRequestMessage(reqMsg);
                     response.sendMessage();
-                    shutdown = request.getUri().equalsIgnoreCase(exitMsg);
+                    shutdown = request.getUri().equalsIgnoreCase(EXIT_MSG);
                 } catch (IOException exc) {
                     exc.printStackTrace();
                 }
