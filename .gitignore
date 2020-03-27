@@ -26,6 +26,6 @@ hs_err_pid*
 target
 .idea/
 *.iml
-.gitignore
+log.txt
+*.gitignore
 checkstyle.xml
-io/log.txt
