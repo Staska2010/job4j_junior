@@ -5,30 +5,34 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class EchoServer {
-    private static final String BYE_MSG = "/?msg=bye";
-    private static boolean closeServer = false;
+    private static final String EXIT_MSG = "exit";
+    boolean shutdown = false;
 
-    public static void main(String[] args) throws IOException {
-
+    public void start() {
         try (ServerSocket server = new ServerSocket(9000)) {
-            while (!closeServer) {
+            while (!shutdown) {
                 Socket client = server.accept();
                 try (OutputStream out = client.getOutputStream();
-                     BufferedReader in = new BufferedReader(
-                             new InputStreamReader(client.getInputStream()))) {
-                    String str;
-                    str = in.readLine();
-                    while (!str.isEmpty()) {
-                        System.out.println(str);
-                        if (str.toLowerCase().contains(BYE_MSG)) {
-                            closeServer = true;
-                        }
-                        str = in.readLine();
-                    }
-                    out.write("HTTP/1.1 200 OK\r\n\\".getBytes());
+                     InputStream in = client.getInputStream()) {
+                    Request request = new Request(in);
+                    String reqMsg = request.parse();
+                    Response response = new Response(out);
+                    response.init();
+                    response.setRequestMessage(reqMsg);
+                    response.sendMessage();
+                    shutdown = request.getUri().equalsIgnoreCase(EXIT_MSG);
+                } catch (IOException exc) {
+                    exc.printStackTrace();
                 }
             }
+        } catch (IOException exc) {
+            exc.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) throws IOException {
+        EchoServer server = new EchoServer();
+        server.start();
     }
 }
 
