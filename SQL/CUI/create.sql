@@ -1,4 +1,6 @@
 CREATE DATABASE request_db;
+
+
 --create RULES table
 CREATE TABLE rules (
 id SERIAL PRIMARY KEY,
@@ -7,10 +9,6 @@ write BOOLEAN,
 open BOOLEAN,
 execute BOOLEAN
 );
--- insert data into RULES table
-INSERT INTO rules (read, write, open, execute) VALUES (true, true, true, true);
-INSERT INTO rules (read, write, open, execute) VALUES (true, false, false, false);
-INSERT INTO rules (read, write, open, execute) VALUES (true, false, true, false);
 
 --create ROLE table
 CREATE TABLE role (
@@ -18,37 +16,23 @@ id SERIAL PRIMaRY KEY,
 role_name VARCHAR(50) PRIMARY KEY,
 );
 
---insert data into ROLE table
-INSERT INTO role role_name VALUES ('super_user');
-INSERT INTO role role_name VALUES ('read');
-INSERT INTO role role_name VALUES ('read_open');
 
 --create RoleRules table (many-to-many relationships)
 --composite primary key of Role and Rules
 CREATE TABLE RoleUsers (
-role INT,
-rules INT,
+role INT NOT NULL REFERENCES role(id),
+rules INT NOT NULL REFERENCES rules(id),
 PRIMARY KEY (role, rules);
 );
-
---insert into RoleRules table (many-to-many relationships)
-INSERT INTO RoleRules VALUES (1, 1);
-INSERT INTO RoleRules VALUES (2, 2);
-INSERT INTO RoleRules VALUES (3, 3);
 
 
 --create USERS table
 CREATE TABLE users (
 id SERIAL PRIMARY KEY,
-name VARCHAR(80),
+name VARCHAR(80) NOT NULL,
 position VARCHAR(80),
 role VARCHAR(50) REFERENCES role(id)
 );
-
---insert data into USERS table
-INSERT INTO users (name, position, role) VALUES ('John', 'CEO', 1);
-INSERT INTO users (name, position, role) VALUES ('Marie', 'storekeeper', 2);
-INSERT INTO users (name, position, role) VALUES ('Ruben', 'assistant', 3);
 
 
 --create CATEGORY table
@@ -56,9 +40,6 @@ CREATE TABLE category (
 id  SERIAL PRIMARY KEY,
 cat_name VARCHAR(50)
 );
-
---insert data into USERS table
-INSERT INTO category (cat_name) VALUES ('Check new project');
 
 
 --create COMMENT table
@@ -68,18 +49,12 @@ com_text TEXT
 item INT REFERENCES item(id)
 );
 
---insert data into COMMENT table
-INSERT INTO comment (com_text, item) VALUES ('Simple comment, used in text field', 1);
-
 
 --create STATE table
 CREATE TABLE state (
 id SERIAL PRIMARY KEY,
 state_name VARCHAR(50) PRIMARY KEY
 );
-
---insert data into STATE table
-INSERT INTO state state_name VALUES ('Ready');
 
 
 --create ATTACHMENT table
@@ -88,9 +63,6 @@ id INT PRIMARY KEY,
 file VARCHAR(80),
 item INT REFERENCES item(id)
 );
-
---insert data into ATTACHMENT table
-INSERT INTO attachment file, item VALUES ('path_to_attached_file', 1);
 
 
 --create ITEM table
@@ -104,24 +76,45 @@ state VARCHAR(50) REFERENCES state(id)
 );
 
 
+
+--insert data into ROLE table
+INSERT INTO role role_name VALUES ('super_user');
+INSERT INTO role role_name VALUES ('read');
+INSERT INTO role role_name VALUES ('read_open');
+
+
+-- insert data into RULES table
+INSERT INTO rules (read, write, open, execute) VALUES (true, true, true, true);
+INSERT INTO rules (read, write, open, execute) VALUES (true, false, false, false);
+INSERT INTO rules (read, write, open, execute) VALUES (true, false, true, false);
+
+
+--insert into RoleRules table (many-to-many relationships)
+INSERT INTO RoleRules VALUES (1, 1);
+INSERT INTO RoleRules VALUES (2, 2);
+INSERT INTO RoleRules VALUES (3, 3);
+
+
+--insert data into USERS table
+INSERT INTO users (name, position, role) VALUES ('John', 'CEO', 1);
+INSERT INTO users (name, position, role) VALUES ('Marie', 'storekeeper', 2);
+INSERT INTO users (name, position, role) VALUES ('Ruben', 'assistant', 3);
+
+--insert data into USERS table
+INSERT INTO category (cat_name) VALUES ('Check new project');
+
+--insert data into COMMENT table
+INSERT INTO comment (com_text, item) VALUES ('Simple comment, used in text field', 1);
+
+--insert data into STATE table
+INSERT INTO state state_name VALUES ('Ready');
+
+--insert data into ATTACHMENT table
+INSERT INTO attachment file, item VALUES ('path_to_attached_file', 1);
+
 --insert data into ITEM table
 INSERT INTO item (item_name, date, users, category, state)
 VALUES ('Check the project', '2020-01-01', 1, 1, 1);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
