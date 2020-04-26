@@ -1,11 +1,11 @@
 package ru.job4j.tracker.singletons;
 
 import ru.job4j.tracker.Item;
-import ru.job4j.tracker.Tracker;
+import ru.job4j.tracker.MemTracker;
 
 public class TrackerSingletonLazy {
     private static TrackerSingletonLazy instance;
-    private Tracker tracker = new Tracker();
+    private MemTracker memTracker = new MemTracker();
 
     private TrackerSingletonLazy() {
     }
@@ -18,7 +18,7 @@ public class TrackerSingletonLazy {
     }
 
     public Item createItem(Item item) {
-        return tracker.add(item);
+        return memTracker.add(item);
     }
     /*****
      *  and other Tracker's methods

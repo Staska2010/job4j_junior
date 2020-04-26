@@ -14,7 +14,7 @@ public class StartUI {
         this.output = output;
     }
 
-    public void init(Input input, Tracker tracker, List<UserAction> actions) {
+    public void init(Input input, Store tracker, List<UserAction> actions) {
         boolean run = true;
         while (run) {
             this.showMenu(actions);
@@ -40,7 +40,7 @@ public class StartUI {
         List<UserAction> actions = new ArrayList<>(Arrays.asList(new CreateAction(),
                 new ShowAllItemsAction(), new DeleteItemAction(), new EditItemAction(),
                 new FindByIdAction(), new FinditemsByNameAction(), new ExitAction()));
-        Tracker tracker = new Tracker();
+        Store tracker = new SqlTracker();
         Input input = new ValidateInput(new ConsoleInput());
         new StartUI(System.out::println).init(input, tracker, actions);
     }

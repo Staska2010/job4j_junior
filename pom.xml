@@ -11,6 +11,7 @@
     <modules>
         <module>collections</module>
         <module>io</module>
+        <module>SQL</module>
     </modules>
 
     <properties>

@@ -8,7 +8,7 @@ public class FindItemByID extends BaseAction {
     }
 
     @Override
-    public boolean execute(Input input, Tracker tracker, Consumer<String> output) {
+    public boolean execute(Input input, Store tracker, Consumer<String> output) {
         String id = input.askStr("Введите ID заявки :");
         Item item = tracker.findById(id);
         if (item != null) {

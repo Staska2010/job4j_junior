@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Tracker {
+public class MemTracker {
     private final List<Item> items = new ArrayList<>();
 
     public Item add(Item item) {
