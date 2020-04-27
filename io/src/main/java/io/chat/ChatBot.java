@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 
 public class ChatBot extends Player {
     private List<String> answers;
-    boolean stopTalking = false;
-    Path answersFile;
+    private boolean stopTalking = false;
+    private Path answersFile;
 
     public ChatBot() {
 
@@ -46,6 +46,14 @@ public class ChatBot extends Player {
             curAnswer = answers.get(numOfString);
         }
         return curAnswer;
+    }
+
+    public void stop() {
+        stopTalking = true;
+    }
+
+    public void go() {
+        stopTalking = false;
     }
 
     @Override

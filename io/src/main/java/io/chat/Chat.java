@@ -22,10 +22,10 @@ public class Chat {
         while (!END.equalsIgnoreCase(out)) {
             for (Player next : players) {
                 if (STOP.equalsIgnoreCase(out) && (next instanceof ChatBot)) {
-                    ((ChatBot) next).stopTalking = true;
+                    ((ChatBot) next).stop();
                 }
                 if (CONTINUE.equalsIgnoreCase(out) && (next instanceof ChatBot)) {
-                    ((ChatBot) next).stopTalking = false;
+                    ((ChatBot) next).go();
                 }
                 out = next.makeAnswer(output);
                 logger.write(out);
