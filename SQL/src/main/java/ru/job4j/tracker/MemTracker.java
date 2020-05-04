@@ -4,9 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Tracker {
+public class MemTracker implements Store {
     private final List<Item> items = new ArrayList<>();
 
+    @Override
+    public void init() {
+
+    }
+
+    @Override
     public Item add(Item item) {
         item.setId(this.generateId());
         items.add(item);
@@ -18,10 +24,12 @@ public class Tracker {
         return String.valueOf(rnd.nextLong() + System.currentTimeMillis());
     }
 
+    @Override
     public List<Item> findAll() {
         return items;
     }
 
+    @Override
     public boolean replace(String id, Item item) {
         boolean result = false;
         for (int i = 0; i < items.size(); i++) {
@@ -34,6 +42,7 @@ public class Tracker {
         return result;
     }
 
+    @Override
     public boolean delete(String id) {
         boolean result = false;
         for (Item item : items) {
@@ -46,6 +55,7 @@ public class Tracker {
         return result;
     }
 
+    @Override
     public Item findById(String id) {
         Item result = null;
         for (Item item : items) {
@@ -56,6 +66,7 @@ public class Tracker {
         return result;
     }
 
+    @Override
     public List<Item> findByName(String name) {
         List<Item> result = new ArrayList<>();
         for (Item item : items) {
@@ -64,5 +75,10 @@ public class Tracker {
             }
         }
         return result;
+    }
+
+    @Override
+    public void close() throws Exception {
+
     }
 }

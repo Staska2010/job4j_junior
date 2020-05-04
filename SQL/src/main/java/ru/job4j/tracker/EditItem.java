@@ -8,7 +8,7 @@ public class EditItem extends BaseAction {
     }
 
     @Override
-    public boolean execute(Input input, Tracker tracker, Consumer<String> output) {
+    public boolean execute(Input input, Store tracker, Consumer<String> output) {
         String id = input.askStr("Введите ID редактируемой заявки :");
         String name = input.askStr("Введите новое название заявки :");
         String desc = input.askStr("Введите новое описание :");

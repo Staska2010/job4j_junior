@@ -9,7 +9,7 @@ public class DeleteItem extends BaseAction {
         super(key, name);
     }
     @Override
-    public boolean execute(Input input, Tracker tracker, Consumer<String> output) {
+    public boolean execute(Input input, Store tracker, Consumer<String> output) {
         String id = input.askStr("Введите ID заявки :");
         if (tracker.delete(id)) {
             output.accept("Заявка с ID: " + id + " удалена");

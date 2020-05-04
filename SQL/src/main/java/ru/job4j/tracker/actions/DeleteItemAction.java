@@ -1,7 +1,8 @@
 package ru.job4j.tracker.actions;
 
 import ru.job4j.tracker.Input;
-import ru.job4j.tracker.Tracker;
+import ru.job4j.tracker.MemTracker;
+import ru.job4j.tracker.Store;
 import ru.job4j.tracker.UserAction;
 
 import java.util.function.Consumer;
@@ -18,7 +19,7 @@ public class DeleteItemAction implements UserAction {
     }
 
     @Override
-    public boolean execute(Input input, Tracker tracker, Consumer<String> output) {
+    public boolean execute(Input input, Store tracker, Consumer<String> output) {
         String id = input.askStr("Введите ID заявки :");
         if (tracker.delete(id)) {
             output.accept("Заявка с ID: " + id + " удалена");

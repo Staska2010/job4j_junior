@@ -9,7 +9,7 @@ public class CreateItem extends BaseAction {
     }
 
     @Override
-    public boolean execute(Input input, Tracker tracker, Consumer<String> output) {
+    public boolean execute(Input input, Store tracker, Consumer<String> output) {
         String name = input.askStr("Введите имя заявки :");
         String desc = input.askStr("Введите описание заявки :");
         Item item = new Item(name, desc);
