@@ -47,7 +47,7 @@ public class SqlTracker implements Store {
 
     @Override
     public Item add(Item item) {
-        String sqlString = "INSERT INTO item (name, descn) VALUES(?, ?);";
+        String sqlString = "INSERT INTO items (name, descn) VALUES(?, ?);";
         try (PreparedStatement pst = cn.prepareStatement(sqlString, Statement.RETURN_GENERATED_KEYS)) {
             pst.setString(1, item.getName());
             pst.setString(2, item.getDesc());
@@ -67,7 +67,7 @@ public class SqlTracker implements Store {
     @Override
     public boolean replace(String id, Item item) {
         int rowsQuantity = 0;
-        String sqlString = "UPDATE item SET name = ?, descn = ? WHERE id = ?;";
+        String sqlString = "UPDATE items SET name = ?, descn = ? WHERE id = ?;";
         try (PreparedStatement pst = cn.prepareStatement(sqlString)) {
             pst.setString(1, item.getName());
             pst.setString(2, item.getDesc());
@@ -82,7 +82,7 @@ public class SqlTracker implements Store {
     @Override
     public boolean delete(String id) {
         int rowsQuantity = 0;
-        String sqlString = "DELETE FROM item WHERE id = ?;";
+        String sqlString = "DELETE FROM items WHERE id = ?;";
         try (PreparedStatement pst = cn.prepareStatement(sqlString)) {
             pst.setInt(1, Integer.parseInt(id));
             rowsQuantity = pst.executeUpdate();
@@ -95,7 +95,7 @@ public class SqlTracker implements Store {
     @Override
     public List<Item> findAll() {
         List<Item> result = new ArrayList<>();
-        String sqlString = "SELECT * FROM item;";
+        String sqlString = "SELECT * FROM items;";
         try (PreparedStatement pst = cn.prepareStatement(sqlString)) {
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
@@ -112,7 +112,7 @@ public class SqlTracker implements Store {
     @Override
     public List<Item> findByName(String key) {
         List<Item> result = new ArrayList<>();
-        String sqlString = "SELECT * FROM item WHERE name = ?;";
+        String sqlString = "SELECT * FROM items WHERE name = ?;";
         try (PreparedStatement pst = cn.prepareStatement(sqlString)) {
             pst.setString(1, key);
             ResultSet rs = pst.executeQuery();
@@ -130,7 +130,7 @@ public class SqlTracker implements Store {
     @Override
     public Item findById(String id) {
         Item result = null;
-        String sqlString = "SELECT * FROM item WHERE id = ?;";
+        String sqlString = "SELECT * FROM items WHERE id = ?;";
         try (PreparedStatement pst = cn.prepareStatement(sqlString)) {
             pst.setInt(1, Integer.parseInt(id));
             ResultSet rs = pst.executeQuery();
