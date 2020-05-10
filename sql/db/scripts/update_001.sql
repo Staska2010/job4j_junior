@@ -1,4 +1,4 @@
-create table items (
-   id serial primary key not null,
-   name varchar(2000)
+CREATE TABLE items (
+   id SERIAL PRIMARY KEY NOT NULL,
+   name VARCHAR(2000)
 );

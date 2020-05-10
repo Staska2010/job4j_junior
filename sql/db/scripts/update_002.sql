@@ -1,0 +1,1 @@
+ALTER TABLE items ADD descn VARCHAR(200) NOT NULL;
