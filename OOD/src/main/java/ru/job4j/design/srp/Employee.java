@@ -3,6 +3,9 @@ package ru.job4j.design.srp;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * Describes basic Employee model
+ */
 public class Employee {
     private String name;
     private LocalDate hired;

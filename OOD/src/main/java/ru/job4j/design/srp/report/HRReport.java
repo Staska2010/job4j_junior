@@ -8,14 +8,13 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class HRReportEngine implements ReportEngine {
+public class HRReport implements Reportable {
     @Override
-    public String generate(Store store) {
-        Predicate<Employee> filter = em -> true;
+    public String generate(List<Employee> list) {
         StringBuilder sb = new StringBuilder();
         sb.append("Name; Salary;")
                 .append(System.lineSeparator());
-        List<Employee> list = store.findBy(filter).stream()
+        list = list.stream()
                 .sorted(Comparator.comparingDouble(Employee::getSalary).reversed())
                 .collect(Collectors.toList());
         for (Employee employee : list) {

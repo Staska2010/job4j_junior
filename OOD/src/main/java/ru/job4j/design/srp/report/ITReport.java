@@ -3,17 +3,18 @@ package ru.job4j.design.srp.report;
 import ru.job4j.design.srp.Employee;
 import ru.job4j.design.srp.Store;
 
+import java.util.List;
 import java.util.function.Predicate;
 
-public class ITReportEngine implements ReportEngine {
+public class ITReport implements Reportable {
     @Override
-    public String generate(Store store) {
+    public String generate(List<Employee> list) {
         Predicate<Employee> filter = em -> true;
         StringBuilder sb = new StringBuilder()
                 .append("<!DOCTYPE html>")
                 .append("<html>")
                 .append("<table>");
-        for (Employee employee : store.findBy(filter)) {
+        for (Employee employee : list) {
             sb.append("<tr>")
                     .append("<td>")
                     .append(employee.getName())

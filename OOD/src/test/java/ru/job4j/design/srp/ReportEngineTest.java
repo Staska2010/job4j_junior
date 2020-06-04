@@ -2,9 +2,7 @@ package ru.job4j.design.srp;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.job4j.design.srp.report.ReportEngine;
-import ru.job4j.design.srp.report.ReportFactory;
-import ru.job4j.design.srp.report.ReportType;
+import ru.job4j.design.srp.report.*;
 
 import java.time.LocalDate;
 
@@ -15,6 +13,7 @@ import static org.junit.Assert.assertThat;
 public class ReportEngineTest {
     MemStore store;
     Employee worker;
+    ReportEngine engine;
 
     @Before
     public void init() {
@@ -22,11 +21,11 @@ public class ReportEngineTest {
         LocalDate now = LocalDate.now();
         worker = new Employee("Ivan", now, now, 100);
         store.add(worker);
+        engine = new ReportEngine(store);
     }
 
     @Test
     public void whenDefaultReportGenerated() {
-        ReportEngine engine = new ReportFactory().create(ReportType.DefaultReportEngine);
         StringBuilder expect = new StringBuilder()
                 .append("Name; Hired; Fired; Salary;")
                 .append(System.lineSeparator())
@@ -35,12 +34,12 @@ public class ReportEngineTest {
                 .append(worker.getFired()).append(";")
                 .append(worker.getSalary()).append(";")
                 .append(System.lineSeparator());
-        assertThat(engine.generate(store), is(expect.toString()));
+        assertThat(engine.generateReport(), is(expect.toString()));
     }
 
     @Test
     public void whenITReportGenerated() {
-        ReportEngine engine = new ReportFactory().create(ReportType.ITReportEngine);
+        engine.setReportType(new ITReport());
         StringBuilder expect = new StringBuilder()
                 .append("<!DOCTYPE html>")
                 .append("<html>")
@@ -61,14 +60,12 @@ public class ReportEngineTest {
                 .append("</tr>")
                 .append("</table>")
                 .append("</html>");
-        System.out.println(expect);
-        System.out.println(engine.generate(store));
-        assertThat(engine.generate(store), is(expect.toString()));
+        assertThat(engine.generateReport(), is(expect.toString()));
     }
 
     @Test
     public void whenAccountantsReportGenerated() {
-        ReportEngine engine = new ReportFactory().create(ReportType.AccountsReportEngine);
+        engine.setReportType(new AccountantsReport());
         StringBuilder expect = new StringBuilder()
                 .append("Name; Hired; Fired; Salary;")
                 .append(System.lineSeparator())
@@ -77,12 +74,12 @@ public class ReportEngineTest {
                 .append(worker.getFired()).append(";")
                 .append(String.format("%.2fруб", worker.getSalary())).append(";")
                 .append(System.lineSeparator());
-        assertThat(engine.generate(store), is(expect.toString()));
+        assertThat(engine.generateReport(), is(expect.toString()));
     };
 
     @Test
     public void whenHRReportGenerated() {
-        ReportEngine engine = new ReportFactory().create(ReportType.HRReportEngine);
+        engine.setReportType(new HRReport());
         Employee worker2 = new Employee("Igor", LocalDate.now(), LocalDate.now(), 200);
         store.add(worker2);
         StringBuilder expect = new StringBuilder()
@@ -94,6 +91,6 @@ public class ReportEngineTest {
                 .append(worker.getName()).append(";")
                 .append(String.format("%.2fруб", worker.getSalary())).append(";")
                 .append(System.lineSeparator());
-        assertThat(engine.generate(store), is(expect.toString()));
+        assertThat(engine.generateReport(), is(expect.toString()));
     }
 }
