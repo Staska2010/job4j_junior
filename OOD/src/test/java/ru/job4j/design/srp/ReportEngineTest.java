@@ -75,7 +75,7 @@ public class ReportEngineTest {
                 .append(String.format("%.2fруб", worker.getSalary())).append(";")
                 .append(System.lineSeparator());
         assertThat(engine.generateReport(), is(expect.toString()));
-    };
+    }
 
     @Test
     public void whenHRReportGenerated() {
@@ -93,4 +93,26 @@ public class ReportEngineTest {
                 .append(System.lineSeparator());
         assertThat(engine.generateReport(), is(expect.toString()));
     }
-}
+
+    @Test
+    public void whenMakeJSONReport() {
+        engine.setReportType(new JSONReport());
+        StringBuilder expect = new StringBuilder()
+                .append("{\"name\":\"Ivan\",\"hired\":"
+                        + "{\"year\":" + LocalDate.now().getYear() + ","
+                        + "\"month\":" + LocalDate.now().getMonthValue() + ","
+                        + "\"day\":" + LocalDate.now().getDayOfMonth() + "},"
+                        + "\"fired\":"
+                        + "{\"year\":" + LocalDate.now().getYear() + ","
+                        + "\"month\":" + LocalDate.now().getMonthValue() + ","
+                        + "\"day\":" + LocalDate.now().getDayOfMonth() + "},"
+                        + "\"salary\":100.0}");
+        assertThat(engine.generateReport(), is(expect.toString()));
+    }
+
+        @Test
+        public void whenMakeXMLReport() {
+            engine.setReportType(new XMLReport());
+            System.out.println(engine.generateReport());
+        }
+    }
