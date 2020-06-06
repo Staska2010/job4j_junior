@@ -113,6 +113,14 @@ public class ReportEngineTest {
         @Test
         public void whenMakeXMLReport() {
             engine.setReportType(new XMLReport());
-            System.out.println(engine.generateReport());
+            StringBuilder sb = new StringBuilder()
+                    .append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n")
+                    .append("<Employees>\n")
+                    .append("    <Employee>\n")
+                    .append("        <name>Ivan</name>\n")
+                    .append("        <hired>" + LocalDate.now() + "</hired>\n")
+                    .append("    </Employee>\n")
+                    .append("</Employees>\n");
+            assertThat(engine.generateReport(), is(sb.toString()));
         }
     }

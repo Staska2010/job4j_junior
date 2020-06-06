@@ -13,6 +13,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.CharArrayWriter;
+import java.io.StringWriter;
 import java.util.List;
 
 public class XMLReport implements Reportable {
@@ -26,20 +27,23 @@ public class XMLReport implements Reportable {
             Document document = builder.newDocument();
             Element root = document.createElement("Employees");
             document.appendChild(root);
-            Element employee = document.createElement("Employee");
-            root.appendChild(employee);
-            Element empData = document.createElement("name");
-            empData.appendChild(document.createTextNode(list.get(0).getName()));
-            employee.appendChild(empData);
-            empData = document.createElement("hired");
-            empData.appendChild(document.createTextNode(list.get(0).getHired().toString()));
-            employee.appendChild(empData);
-
+            for (Employee emp : list) {
+                Element employee = document.createElement("Employee");
+                root.appendChild(employee);
+                Element empData = document.createElement("name");
+                empData.appendChild(document.createTextNode(emp.getName()));
+                employee.appendChild(empData);
+                empData = document.createElement("hired");
+                empData.appendChild(document.createTextNode(emp.getHired().toString()));
+                employee.appendChild(empData);
+            }
+            StringWriter writer = new StringWriter();
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(System.out);
+            StreamResult result = new StreamResult(writer);
             transformer.transform(source, result);
+            str = writer.getBuffer().toString();
         } catch (Exception exc) {
             exc.printStackTrace();
         }
