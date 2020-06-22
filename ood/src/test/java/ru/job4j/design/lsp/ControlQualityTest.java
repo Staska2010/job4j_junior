@@ -12,7 +12,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 public class ControlQualityTest {
-    private MockControlQuality cq;
+    private ControlQuality cq;
     private Shop shop;
     private WareHouse wareHouse;
     private Trash trash;
@@ -22,37 +22,39 @@ public class ControlQualityTest {
         shop = new Shop();
         wareHouse = new WareHouse();
         trash = new Trash();
-        cq = new MockControlQuality(shop, wareHouse, trash);
+        cq = new ControlQuality(shop, wareHouse, trash);
     }
 
     @Test
     public void whenAddFoodWithDifferentShelfLifeTheyAppearsInAppropriateStores() {
         Food milk = new Food("Milk",
-                LocalDate.of(2020, 5, 11),
-                LocalDate.of(2019, 1, 12),
+                LocalDate.now().plusDays(7),
+                LocalDate.now().minusDays(7),
                 50);
         Food milkFromFuture = new Food("Milk From The Future",
-                LocalDate.of(2020, 12, 31),
-                LocalDate.of(2020, 1, 10),
+                LocalDate.now().plusDays(10),
+                LocalDate.now().plusDays(2),
                 50);
         Food whiteBread = new Food("White Bread",
-                LocalDate.of(2020, 1, 3),
-                LocalDate.of(2020, 1, 1),
+                LocalDate.now().plusDays(30),
+                LocalDate.now(),
                 50);
         Food wheatFlour = new Food("Wheat Flour",
-                LocalDate.of(2020, 1, 5),
-                LocalDate.of(2019, 11, 10),
+                LocalDate.now().plusDays(45),
+                LocalDate.now().minusDays(12),
                 50);
-        cq.relocateTheFood(milk);
-        cq.relocateTheFood(milkFromFuture);
-        cq.relocateTheFood(whiteBread);
-        cq.relocateTheFood(wheatFlour);
-        assertTrue(shop.showStoreContents().contains(milk));
-        assertTrue(trash.showStoreContents().contains(milkFromFuture)); //product with illegal production date
-        assertTrue(wareHouse.showStoreContents().contains(whiteBread));
-        assertTrue(shop.showStoreContents().contains(wheatFlour));
-        int index = shop.showStoreContents().indexOf(wheatFlour);
-        assertThat(shop.showStoreContents().get(index).getDiscount(), is(50)); //discount was set to 50%
+        cq.checkTheFood(milk);
+        cq.checkTheFood(milkFromFuture);
+        cq.checkTheFood(whiteBread);
+        cq.checkTheFood(wheatFlour);
+        assertTrue(shop.isValid(milk));
+        assertTrue(trash.isValid(milkFromFuture));
+        assertTrue(wareHouse.isValid(whiteBread));
+        assertTrue(shop.isValid(wheatFlour));
+        assertFalse(trash.isValid(milk));
+        assertFalse(wareHouse.isValid(wheatFlour));
+        int index = shop.getContents().indexOf(wheatFlour);
+        assertThat(shop.getContents().get(index).getDiscount(), is(50)); //discount was set to 50%
 
 
     }
